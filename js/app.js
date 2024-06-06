@@ -3,7 +3,7 @@ let textInput;
 let inputText = "";
 
 function setup() {
-  let canvas = createCanvas(500, 500);
+  let canvas = createCanvas(800, 600);
   canvas.parent("drawingCanvas");
 
   textInput = select("#textInput");
@@ -17,9 +17,9 @@ function updateText() {
 
 function drawShapes() {
   clear();
-  let x = 50;
-  let y = 50;
-  const lineLength = 50;
+  let x = 200;
+  let y = 200;
+  const shapeSize = 200;
   const shapes = inputText.split(" ");
 
   for (let i = 0; i < shapes.length; i++) {
@@ -27,34 +27,93 @@ function drawShapes() {
 
     switch (shape) {
       case "circle":
-        ellipse(x, y, lineLength, lineLength);
+        ellipse(x, y, shapeSize, shapeSize);
         break;
       case "square":
-        rect(x, y, lineLength, lineLength);
+        rect(x, y, shapeSize, shapeSize);
+        break;
+      case "rectangle":
+        rect(x, y, shapeSize * 1.5, shapeSize);
         break;
       case "triangle":
         triangle(
           x,
-          y + lineLength,
-          x + lineLength / 2,
+          y + shapeSize,
+          x + shapeSize / 2,
           y,
-          x + lineLength,
-          y + lineLength
+          x + shapeSize,
+          y + shapeSize
         );
         break;
       case "line":
-        line(x, y, x + lineLength, y);
+        line(x, y, x + shapeSize, y);
+        break;
+      case "cylinder":
+        rect(x, y, shapeSize, shapeSize * 1.5);
+        ellipse(x + shapeSize / 2, y, shapeSize, shapeSize / 2);
+        ellipse(
+          x + shapeSize / 2,
+          y + shapeSize * 1.5,
+          shapeSize,
+          shapeSize / 2
+        );
+        break;
+      case "boat":
+        drawBoat(x, y, shapeSize);
+        break;
+      case "plane":
+        drawPlane(x, y, shapeSize);
+        break;
+      case "car":
+        drawCar(x, y, shapeSize);
         break;
       default:
         continue; // Ignore unrecognized words
     }
 
-    x += lineLength + 20;
-    if (x + lineLength > width) {
+    x += shapeSize + 30;
+    if (x + shapeSize > width) {
       x = 50;
-      y += lineLength + 30;
+      y += shapeSize + 60;
     }
   }
+}
+
+function drawBoat(x, y, size) {
+  fill(102, 51, 0); // Brown color for boat body
+  rect(x, y + size / 2, size * 2, size / 2); // Boat body
+  fill(255); // White color for sail
+  triangle(
+    x + size,
+    y,
+    x + size * 1.5,
+    y + size / 2,
+    x + size / 2,
+    y + size / 2
+  ); // Sail
+}
+
+function drawPlane(x, y, size) {
+  fill(200); // Grey color for plane body
+  rect(x, y + size / 4, size * 1.5, size / 2); // Body
+  triangle(
+    x + size * 1.5,
+    y,
+    x + size * 2,
+    y + size / 4,
+    x + size * 1.5,
+    y + size / 2
+  ); // Nose
+  rect(x + size / 2, y, size / 2, size / 2); // Tail
+  rect(x + size / 2, y + size / 2, size / 2, size / 8); // Wing
+}
+
+function drawCar(x, y, size) {
+  fill(255, 0, 0); // Red color for car body
+  rect(x, y + size / 2, size * 1.5, size / 2); // Car body
+  fill(0); // Black color for wheels
+  ellipse(x + size / 4, y + size, size / 2, size / 2); // Front wheel
+  ellipse(x + size * 1.25, y + size, size / 2, size / 2); // Rear wheel
 }
 
 function draw() {
